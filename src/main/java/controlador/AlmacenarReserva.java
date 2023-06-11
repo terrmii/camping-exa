@@ -11,29 +11,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import modelo.Parcela;
 import modelo.ParcelaModelo;
 import modelo.Reserva;
 import modelo.ReservaModelo;
 
 /**
- * Servlet implementation class ConfirmarReserva
- */
+* Servlet implementation class ConfirmarReserva
+*/
 @WebServlet("/AlmacenarReserva")
 public class AlmacenarReserva extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AlmacenarReserva() {
-        super();
-    }
-
+	
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	* @see HttpServlet#HttpServlet()
+	*/
+	public AlmacenarReserva() {
+		super();
+	}
+	
+	/**
+	* @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	*/
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		//TODO implementar la funcionalidad de almacenar reserva
 		//se abrirá la vista infoReserva
 		int idReserva = Integer.parseInt(request.getParameter("idReserva"));
@@ -47,11 +47,12 @@ public class AlmacenarReserva extends HttpServlet {
 		
 		request.getRequestDispatcher("infoReserva.jsp").forward(request, response);
 	}
-
+	
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	* @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	*/
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		
 		Reserva reserva = new Reserva();
 		
@@ -72,10 +73,9 @@ public class AlmacenarReserva extends HttpServlet {
 		reserva.setInicioReserva(inicioReserva);
 		reserva.setFinReserva(finReserva);
 		
-		if(request.getParameter("luz") != null) {
+		if (request.getParameter("luz") != null) {
 			reserva.setLuz(true);
-		}
-		else {
+		} else {
 			reserva.setLuz(false);
 		}
 		
@@ -86,11 +86,13 @@ public class AlmacenarReserva extends HttpServlet {
 		int idReserva = 0;
 		int idParcela = 0;
 		
-		idReserva = rm.reservarParcela(reserva);
+		rm.reservarParcela(reserva);
+		
+		idReserva = rm.veridInsertado();
 		idParcela = reserva.getIdParcela();
 		
-		doGet(request, response);
-		response.sendRedirect(request.getContextPath() + "/AlmacenarReserva?idReserva="+idReserva+"&id_parcela="+idParcela);
+		response.sendRedirect(request.getContextPath() + "/AlmacenarReserva?idReserva=" + idReserva
+				+ "&id_parcela=" + idParcela);
 	}
-
+	
 }

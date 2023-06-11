@@ -79,7 +79,7 @@
 
 					</tbody>
 				</table>
-				<a class="btn btn-danger" href="AnularReserva?idReserva=${reserva.id}">Anular reserva</a>
+				<a class="btn btn-danger" href="CancelarReserva?idReserva=${reserva.id}">Anular reserva</a>
 				
 			</div>
 		</div>

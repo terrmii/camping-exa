@@ -5,24 +5,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-public class ReservaModelo extends Conector{
-/*
+public class ReservaModelo extends Conector {
+	/*
 	"INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva,  luz, id_parcela) "
-			+ "VALUES (?,?,?,?,?,?,?,?)"
-			
+	+ "VALUES (?,?,?,?,?,?,?,?)"
+	
 	"DELETE FROM reservas WHERE id = ?"
-		*/
-		
-
-	public int reservarParcela(Reserva reserva) {
-		
-		int id = 0;
+			*/
+			
+			public void reservarParcela(Reserva reserva) {
 		
 		try {
-			PreparedStatement ps = conexion.prepareStatement("INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva,  luz, id_parcela) VALUES (?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
-			
-			ResultSet gk = ps.getGeneratedKeys();
+			PreparedStatement ps = conexion.prepareStatement(
+					"INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva, luz, id_parcela) VALUES (?,?,?,?,?,?,?,?)");
 			
 			ps.setString(1, reserva.getNombreUsuario());
 			ps.setString(2, reserva.getApellidoUsuario());
@@ -33,11 +28,26 @@ public class ReservaModelo extends Conector{
 			ps.setBoolean(7, reserva.isLuz());
 			ps.setInt(8, reserva.getIdParcela());
 			
-			ps.executeUpdate();
+			ps.execute();
 			
-			if(gk.next()) {
-				reserva.setId(gk.getInt(1));
-				id = reserva.getId();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public int veridInsertado() {
+		
+		int idInsertado = 0;
+		
+		try {
+			PreparedStatement ps = conexion.prepareStatement("SELECT MAX(id) FROM reservas");
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				idInsertado = rs.getInt(1);
 			}
 			
 		} catch (SQLException e) {
@@ -45,9 +55,9 @@ public class ReservaModelo extends Conector{
 			e.printStackTrace();
 		}
 		
-		return id;
+		return idInsertado;
 	}
-
+	
 	public void anularReserva(int id) {
 		
 		try {
@@ -76,7 +86,7 @@ public class ReservaModelo extends Conector{
 			
 			ResultSet rs = ps.executeQuery();
 			
-			while(rs.next()) {
+			while (rs.next()) {
 				
 				reserva.setId(id);
 				reserva.setNombreUsuario(rs.getString("nombre_usuario"));
