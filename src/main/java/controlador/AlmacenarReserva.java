@@ -86,9 +86,10 @@ public class AlmacenarReserva extends HttpServlet {
 		int idReserva = 0;
 		int idParcela = 0;
 		
-		rm.reservarParcela(reserva);
+
 		
-		idReserva = rm.veridInsertado();
+//		idReserva = rm.veridInsertado();
+		idReserva = rm.reservarParcela(reserva);
 		idParcela = reserva.getIdParcela();
 		
 		response.sendRedirect(request.getContextPath() + "/AlmacenarReserva?idReserva=" + idReserva

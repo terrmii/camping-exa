@@ -46,6 +46,7 @@
  							</c:forEach>
 					</tbody>
 				</table>
+				<a class ="btn btn-secondary" href="NuevaReserva">Nueva Reserva</a>
 			</div>
 		</div>
 	</div>

@@ -13,11 +13,13 @@ public class ReservaModelo extends Conector {
 	"DELETE FROM reservas WHERE id = ?"
 			*/
 			
-			public void reservarParcela(Reserva reserva) {
+	public int reservarParcela(Reserva reserva) {
+		
+		int idGenerado = 0;
 		
 		try {
 			PreparedStatement ps = conexion.prepareStatement(
-					"INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva, luz, id_parcela) VALUES (?,?,?,?,?,?,?,?)");
+					"INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva, luz, id_parcela) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, reserva.getNombreUsuario());
 			ps.setString(2, reserva.getApellidoUsuario());
@@ -30,24 +32,11 @@ public class ReservaModelo extends Conector {
 			
 			ps.execute();
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public int veridInsertado() {
-		
-		int idInsertado = 0;
-		
-		try {
-			PreparedStatement ps = conexion.prepareStatement("SELECT MAX(id) FROM reservas");
+			ResultSet generatedKeys = ps.getGeneratedKeys();
 			
-			ResultSet rs = ps.executeQuery();
-			
-			if (rs.next()) {
-				idInsertado = rs.getInt(1);
+			if(generatedKeys.next()) {
+				idGenerado = generatedKeys.getInt(1);
+
 			}
 			
 		} catch (SQLException e) {
@@ -55,8 +44,29 @@ public class ReservaModelo extends Conector {
 			e.printStackTrace();
 		}
 		
-		return idInsertado;
+		return idGenerado;
 	}
+	
+//	public int veridInsertado() {
+//		
+//		int idInsertado = 0;
+//		
+//		try {
+//			PreparedStatement ps = conexion.prepareStatement("SELECT MAX(id) FROM reservas");
+//			
+//			ResultSet rs = ps.executeQuery();
+//			
+//			if (rs.next()) {
+//				idInsertado = rs.getInt(1);
+//			}
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return idInsertado;
+//	}
 	
 	public void anularReserva(int id) {
 		
@@ -105,5 +115,29 @@ public class ReservaModelo extends Conector {
 		}
 		
 		return reserva;
+	}
+	
+	public void nuevaReserva(Reserva reserva) {
+		
+		try {
+			PreparedStatement ps = conexion.prepareStatement(
+					"INSERT INTO reservas(nombre_usuario, apellido_usuario, dni_usuario, numero_usuarios, inicio_reserva, fin_reserva, luz, id_parcela) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			
+			ps.setString(1, reserva.getNombreUsuario());
+			ps.setString(2, reserva.getApellidoUsuario());
+			ps.setString(3, reserva.getDniUsuario());
+			ps.setInt(4, reserva.getNumeroUsuarios());
+			ps.setDate(5, new java.sql.Date(reserva.getInicioReserva().getTime()));
+			ps.setDate(6, new java.sql.Date(reserva.getFinReserva().getTime()));
+			ps.setBoolean(7, reserva.isLuz());
+			ps.setInt(8, reserva.getIdParcela());
+			
+			ps.execute();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
